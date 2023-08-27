@@ -69,3 +69,37 @@ def insert_word(message):
     db.insert_word(word, translation)
     text = 'Слово '+word+' успешно добавлено'
     bot.send_message(message.chat.id, text)
+
+
+@bot.message_handler(commands=['start_test'])
+def command_start_test(message):
+    """."""
+    random_words = db.get_random_words(5)
+    text = ''
+    for random_word in random_words:
+        text += random_word[0]+'\n'
+    bot.send_message(message.chat.id, text)
+    bot.register_next_step_handler(message, check_test, random_words)
+
+
+def check_test(message, random_words):
+    """."""
+    answers = message.text.split('\n')
+    wrong_answers = []
+    i = 0
+    for word in random_words:
+        if not word[1] == answers[i]:
+            print('check '+word[1]+' and '+answers[i])
+            wrong_answers.append(word[0]+' - '+answers[i])
+        i += 1
+    score = str(len(random_words) - len(wrong_answers))+'/'+str(len(random_words))
+    if len(wrong_answers) == 0:
+        text = 'Ошибок нет\n\nОценка '+score
+    else:
+        text = 'Ошибок '+str(len(wrong_answers))+'\n\nОценка '+score+'\n\n'
+        text += 'Вот правильные ответы:\n\n'
+        for wrong_answer in wrong_answers:
+            print(wrong_answer)
+            text += wrong_answer+'\n'
+
+    bot.send_message(message.chat.id, text)

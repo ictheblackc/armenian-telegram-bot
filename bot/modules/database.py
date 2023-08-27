@@ -81,12 +81,14 @@ class Database:
         connection.close()
         return random_word
 
-    # def get_random_words(self, limit):
-    #     connection = sqlite3.connect(f'{self.name}.sqlite3')
-    #     sql = f"""
-    #     SELECT * FROM words ORDER BY RANDOM() LIMIT {limit};
-    #     """
-    #     random_words = connection.execute(sql)
-    #     print(random_words[0])
-    #     connection.close()
-    #     return random_words
+    def get_random_words(self, limit=10):
+        connection = sqlite3.connect(f'{self.name}.sqlite3')
+        sql = f"""
+        SELECT * FROM words ORDER BY RANDOM() LIMIT {limit};
+        """
+        cursor = connection.execute(sql)
+        random_words = []
+        for row in cursor:
+            random_words.append(row)
+        connection.close()
+        return random_words
