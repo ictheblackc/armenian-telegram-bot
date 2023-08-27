@@ -55,6 +55,21 @@ class Database:
         connection.commit()
         connection.close()
 
+    def insert_word(self, word, translation):
+        connection = sqlite3.connect(f'{self.name}.sqlite3')
+        sql = f"""
+        INSERT OR IGNORE INTO words (
+            word,
+            translation
+        ) VALUES (
+            '{word}',
+            '{translation}'
+        );
+        """
+        connection.execute(sql)
+        connection.commit()
+        connection.close()
+
     def get_random_word(self):
         connection = sqlite3.connect(f'{self.name}.sqlite3')
         sql = """
@@ -65,3 +80,13 @@ class Database:
             random_word = row
         connection.close()
         return random_word
+
+    # def get_random_words(self, limit):
+    #     connection = sqlite3.connect(f'{self.name}.sqlite3')
+    #     sql = f"""
+    #     SELECT * FROM words ORDER BY RANDOM() LIMIT {limit};
+    #     """
+    #     random_words = connection.execute(sql)
+    #     print(random_words[0])
+    #     connection.close()
+    #     return random_words
