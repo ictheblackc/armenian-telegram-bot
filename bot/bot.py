@@ -74,7 +74,7 @@ def insert_word(message):
 @bot.message_handler(commands=['start_test'])
 def command_start_test(message):
     """."""
-    random_words = db.get_random_words(5)
+    random_words = db.get_random_words()
     text = ''
     for random_word in random_words:
         text += random_word[0]+'\n'
@@ -90,7 +90,7 @@ def check_test(message, random_words):
     for word in random_words:
         if not word[1] == answers[i]:
             print('check '+word[1]+' and '+answers[i])
-            wrong_answers.append(word[0]+' - '+answers[i])
+            wrong_answers.append(word[0]+' - '+word[1])
         i += 1
     score = str(len(random_words) - len(wrong_answers))+'/'+str(len(random_words))
     if len(wrong_answers) == 0:
